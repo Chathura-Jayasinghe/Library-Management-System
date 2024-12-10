@@ -8,9 +8,6 @@ class Library:
         self.conn = sqlite3.connect(db_name, check_same_thread=False)
 
     def initialize_database(self):
-        """
-        Initialize the database with support for comics.
-        """
         cursor = self.conn.cursor()
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS books (
@@ -56,7 +53,7 @@ class Library:
         cursor = self.conn.cursor()
         cursor.execute("SELECT is_available FROM books WHERE book_id = ?", (book_id,))
         result = cursor.fetchone()
-        if result and result[0] == 1:  # Ensure book is available
+        if result and result[0] == 1:
             cursor.execute("""
                 UPDATE books
                 SET is_available = 0, borrower_id = ?
@@ -84,9 +81,6 @@ class Library:
         return "Book is not borrowed."
 
     def list_books(self):
-        """
-        Retrieve all books and comics from the database and return appropriate objects.
-        """
         cursor = self.conn.cursor()
         cursor.execute("""
             SELECT book_id, title, author, is_available, borrower_id, illustrator
@@ -95,11 +89,11 @@ class Library:
         rows = cursor.fetchall()
         books = []
         for row in rows:
-            if row[5]:  # If illustrator is not NULL, it's a Comic
+            if row[5]: 
                 book = Comic(row[1], row[2], row[0], row[5])
             else:
                 book = Book(row[1], row[2], row[0])
-            book._is_available = bool(row[3])  # Update availability based on DB
+            book._is_available = bool(row[3]) 
             books.append(book)
         return books
 
