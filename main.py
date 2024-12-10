@@ -1,29 +1,12 @@
 import streamlit as st
 import requests
 
-# Backend API URL
 BASE_URL = "http://127.0.0.1:8000"
 
-# Streamlit App
 st.title("Library Management System")
 
-# Tabs for functionalities
 tabs = st.tabs(["Add Book/Comic", "Borrow Book", "Return Book", "View Books", "Manage Members"])
 
-# Add Book or Comic
-# with tabs[0]:
-#     st.header("Add Book/Comic")
-#     title = st.text_input("Title")
-#     author = st.text_input("Author")
-#     is_comic = st.checkbox("Is this a Comic?")
-#     illustrator = st.text_input("Illustrator (Only for Comics)") if is_comic else None
-#     if st.button("Add Book/Comic"):
-#         data = {"title": title, "author": author, "illustrator": illustrator}
-#         response = requests.post(f"{BASE_URL}/add_book/", json=data)
-#         if response.status_code == 200:
-#             st.success(response.json()["message"])
-#         else:
-#             st.error(response.json()["detail"])
 with tabs[0]:
     st.header("Add Book/Comic")
     title = st.text_input("Title")
@@ -33,7 +16,7 @@ with tabs[0]:
 
     if st.button("Add Book/Comic"):
         data = {"title": title, "author": author}
-        if is_comic and illustrator:  # Only include illustrator if it's a comic and provided
+        if is_comic and illustrator:  
             data["illustrator"] = illustrator
         
         response = requests.post(f"{BASE_URL}/add_book/", json=data)
