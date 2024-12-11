@@ -51,39 +51,51 @@ with tabs[2]:
         else:
             st.error(response.json()["detail"])
 
-# View Books
 with tabs[3]:
     st.header("Available Books and Comics")
     response = requests.get(f"{BASE_URL}/list_books/")
     if response.status_code == 200:
         books = response.json()
-        for book in books:
-            book_info = f"ID: {book['id']}, Title: {book['title']}, Author: {book['author']}, {book['availability']}"
-            if book.get("illustrator"):
-                book_info += f", Illustrator: {book['illustrator']}"
-            st.write(book_info)
+        
+        if books:
+            table_data = []
+            for book in books:
+                row = {
+                    "ID": book["id"],
+                    "Title": book["title"],
+                    "Author": book["author"],
+                    "Availability": book["availability"],
+                    "Illustrator": book.get("illustrator", "N/A") 
+                }
+                table_data.append(row)
+            
+            st.table(table_data) 
+        else:
+            st.write("No books or comics available.")
     else:
         st.error("Error retrieving books.")
 
 # Manage Members
 with tabs[4]:
-    st.header("Add Member")
-    name = st.text_input("Name")
-    email = st.text_input("Email")
-    if st.button("Add Member"):
-        data = {"name": name, "email": email}
-        response = requests.post(f"{BASE_URL}/add_person/", json=data)
-        if response.status_code == 200:
-            st.success(response.json()["message"])
-        else:
-            st.error(response.json()["detail"])
-
     st.header("View Members")
     response = requests.get(f"{BASE_URL}/list_persons/")
     if response.status_code == 200:
         persons = response.json()
-        for person in persons:
-            st.write(f"ID: {person['id']}, Name: {person['name']}, Email: {person['email']}")
+        
+        if persons:
+            table_data = []
+            for person in persons:
+                row = {
+                    "ID": person["id"],
+                    "Name": person["name"],
+                    "Email": person["email"]
+                }
+                table_data.append(row)
+            
+            st.table(table_data) 
+        else:
+            st.write("No members available.")
     else:
         st.error("Error retrieving members.")
+
 
