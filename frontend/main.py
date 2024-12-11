@@ -51,6 +51,7 @@ with tabs[2]:
         else:
             st.error(response.json()["detail"])
 
+# View Books
 with tabs[3]:
     st.header("Available Books and Comics")
     response = requests.get(f"{BASE_URL}/list_books/")
@@ -77,6 +78,17 @@ with tabs[3]:
 
 # Manage Members
 with tabs[4]:
+    st.header("Add Member")
+    name = st.text_input("Name")
+    email = st.text_input("Email")
+    if st.button("Add Member"):
+        data = {"name": name, "email": email}
+        response = requests.post(f"{BASE_URL}/add_person/", json=data)
+        if response.status_code == 200:
+            st.success(response.json()["message"])
+        else:
+            st.error(response.json()["detail"])
+
     st.header("View Members")
     response = requests.get(f"{BASE_URL}/list_persons/")
     if response.status_code == 200:
