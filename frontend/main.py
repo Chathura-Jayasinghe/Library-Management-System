@@ -7,6 +7,7 @@ st.title("Library Management System")
 
 tabs = st.tabs(["Add Book/Comic", "Borrow Book", "Return Book", "View Books", "Manage Members"])
 
+# Add book
 with tabs[0]:
     st.header("Add Book/Comic")
     title = st.text_input("Title")

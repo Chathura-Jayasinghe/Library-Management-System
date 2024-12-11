@@ -51,8 +51,15 @@ class Library:
 
     def borrow_book(self, book_id, person_id):
         cursor = self.conn.cursor()
+
+        cursor.execute("SELECT * FROM persons WHERE person_id = ?", (person_id,))
+        person = cursor.fetchone()
+        if not person:
+            return f"Person with ID {person_id} does not exist."
+
         cursor.execute("SELECT is_available FROM books WHERE book_id = ?", (book_id,))
         result = cursor.fetchone()
+
         if result and result[0] == 1:
             cursor.execute("""
                 UPDATE books
@@ -99,9 +106,6 @@ class Library:
 
 
     def list_persons(self):
-        """
-        Retrieve all persons from the database and return as a list of Person objects.
-        """
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM persons")
         rows = cursor.fetchall()

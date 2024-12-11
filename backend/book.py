@@ -23,3 +23,6 @@ class Comic(Book):
     def get_item_info(self):
         basic_info = super().get_item_info()
         return f"{basic_info}, Illustrator: {self.illustrator}"
+    
+    def check_availability(self):
+        return "Available" if self._is_available else "Not Available"
