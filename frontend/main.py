@@ -5,17 +5,17 @@ BASE_URL = "http://127.0.0.1:8000"
 
 st.title("Library Management System")
 
-tabs = st.tabs(["Add Book/Comic", "Borrow Book", "Return Book", "View Books", "Manage Members"])
+tabs = st.tabs(["Add Book", "Borrow Book", "Return Book", "View Books", "Manage Members", "Borrowings"])
 
 # Add book
 with tabs[0]:
-    st.header("Add Book/Comic")
+    st.header("Add Book")
     title = st.text_input("Title")
     author = st.text_input("Author")
     is_comic = st.checkbox("Is this a Comic?")
     illustrator = st.text_input("Illustrator (Only for Comics)") if is_comic else None
 
-    if st.button("Add Book/Comic"):
+    if st.button("Add Book"):
         data = {"title": title, "author": author}
         if is_comic and illustrator:  
             data["illustrator"] = illustrator
@@ -110,3 +110,29 @@ with tabs[4]:
             st.write("No members available.")
     else:
         st.error("Error retrieving members.")
+
+# View Borrowings
+with tabs[5]:
+    st.header("Borrowings")
+
+    response = requests.get(f"{BASE_URL}/list_borrowings/")
+    if response.status_code == 200:
+        borrowings = response.json()
+        
+        if borrowings:
+            table_data = []
+            for borrowing in borrowings:
+                row = {
+                    "Borrowing ID": borrowing["borrowing_id"],
+                    "Book ID": borrowing["book_id"],
+                    "Person ID": borrowing["person_id"],
+                    "Borrowed Date": borrowing.get("borrowed_date", "N/A"),
+                    "Returned Date": borrowing.get("returned_date", "N/A")
+                }
+                table_data.append(row)
+            
+            st.table(table_data)
+        else:
+            st.write("No borrowings available.")
+    else:
+        st.error("Error retrieving borrowings.")

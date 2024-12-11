@@ -49,6 +49,20 @@ def return_book(data: BorrowReturn):
         raise HTTPException(status_code=404, detail=message)
     return {"message": message}
 
+@app.get("/list_borrowings/")
+def list_borrowings():
+    borrowings = library.list_borrowings()
+    return [
+        {
+            "borrowing_id": row[0],
+            "book_id": row[1],
+            "person_id": row[2],
+            "borrowed_date": row[3],
+            "returned_date": row[4]
+        }
+        for row in borrowings
+    ]
+
 @app.get("/list_books/")
 def list_books():
     books = library.list_books()
