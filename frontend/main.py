@@ -109,5 +109,3 @@ with tabs[4]:
             st.write("No members available.")
     else:
         st.error("Error retrieving members.")
-
-
